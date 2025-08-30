@@ -53,3 +53,19 @@ The src-loop introduces some improvements: the code is now organized into direct
 To store the object files, the build-directory introduces a dedicated build directory. The SFILE remains the same, bu the OBJECT list is modified to palce the .o files inside BUILD_DIR. Because the .o files and .ccp files are now in different directories, the single-file compilation loop must be updated accordingly. 
 
 An additional dependency is added by appending | `$(BUILD_DIR)` to the loop. This ensures that make first checks whether the build directory exists and creates it if necessary, before compiling the individual source files.
+
+## 04-header-simple
+
+The previous example has a major limitation: it does not account for modifications in the header files. The include directory points to them, but the rules do not check for changes. A simple trick to track modifications is to add a list of headers and then set this list as prerequisites in the rule:
+
+```bash
+HEADERS=$(wildcard $(HEADERS_DIR)/*.h )
+
+# ....
+
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(HEADERS)| $(BUILD_DIR)
+	@echo compile $< into $@ 
+	$(CC) $(FLAGS) -c -o $@ $<
+```
+
+The HEADERS variable is now a dependency of each object file compilation. However, this technique suffers from a major drawback: a single header modification will trigger the recompilation of all the files. When any header changes, make considers every object file target out of date, since HEADERS is just a list of all headers and does not take into account whether a specific source file actually includes the modified header. 
