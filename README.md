@@ -2,6 +2,41 @@
 
 A collection of Makefiles for managing small to medium-sized projects. Each version builds on the previous one, extending its functionality.
 
+# 00-intro
+
+The intro shows the basic structure of a Makefile
+
+First, we define some variables.
+
+```bash
+CC=g++                            # compiler                          
+INDIRS=-I.                        # directory with headers
+FLAGS=-Wall -Wextra -g $(INDIRS)  # compilation flag
+
+BINARY=exec                       # name of the executable
+```
+
+Next we introduce a *rule*. When invoked, the Makefile looks for the first rule, which by convention is all. This rule depends on the file named $(BINARY). Running make will therefore hits the all rule. As the rule has a dependency on $(BINARY), make will checks if other rules depend on them.
+
+```bash
+all: $(BINARY)
+```
+
+Finally we have the compilation. The $(BINARY) variable depends on the main.ccp and foo.ccp files. In a nutshell, any modification of them would trigger a recompilation. In the body of the rule we specifies the exact compilation command.
+
+```bash
+$(BINARY): main.cpp foo.cpp
+	$(CC) -o $(BINARY) main.cpp foo.cpp $(FLAGS)
+```
+
+In addition, we can specify other rules. To invoke this we have to type the command `make clean` to skip the first `all` rule. The convention is to name clean the set of operations for cleaning the files. 
+
+```bash
+clean:
+	rm $(BINARY) 
+```
+
+
 # 01-simple
 
 The simple example takes a list of source files specified in the variable SFILES and a corresponding list of object files in OBJECT. The binary exe is the target to be built. When this target is reached, the Makefile compiles each .cpp file into its corresponding .o file, without linking.
