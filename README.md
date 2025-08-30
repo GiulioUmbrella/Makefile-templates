@@ -16,13 +16,13 @@ FLAGS=-Wall -Wextra -g $(INDIRS)  # compilation flag
 BINARY=exec                       # name of the executable
 ```
 
-Next we introduce a *rule*. When invoked, the Makefile looks for the first rule, which by convention is all. This rule depends on the file named $(BINARY). Running make will therefore hits the all rule. As the rule has a dependency on $(BINARY), make will checks if other rules depend on them.
+Next we introduce a *rule*. When invoked, the Makefile looks for the first rule, which by convention is all. This rule depends on the file named `BINARY`. Running make will therefore hits the all rule. As the rule has a dependency on `BINARY`, make will checks if other rules depend on them.
 
 ```bash
 all: $(BINARY)
 ```
 
-Finally we have the compilation. The $(BINARY) variable depends on the main.ccp and foo.ccp files. In a nutshell, any modification of them would trigger a recompilation. In the body of the rule we specifies the exact compilation command.
+Finally we have the compilation. The `BINARY` variable depends on the main.ccp and foo.ccp files. In a nutshell, any modification of them would trigger a recompilation. In the body of the rule we specifies the exact compilation command.
 
 ```bash
 $(BINARY): main.cpp foo.cpp
@@ -41,7 +41,7 @@ clean:
 
 The simple example takes a list of source files specified in the variable SFILES and a corresponding list of object files in OBJECT. The binary exe is the target to be built. When this target is reached, the Makefile compiles each .cpp file into its corresponding .o file, without linking.
 
-Next, the compiler is invoked to combine all the right-hand-side elements (specified by the special character $^) and create the object $@.
+Next, the compiler is invoked to combine all the right-hand-side elements specified by the special character `$^` and create the object `$@`.
 
 
 ## 02-src-loop
@@ -52,4 +52,4 @@ The src-loop introduces some improvements: the code is now organized into direct
 
 To store the object files, the build-directory introduces a dedicated build directory. The SFILE remains the same, bu the OBJECT list is modified to palce the .o files inside BUILD_DIR. Because the .o files and .ccp files are now in different directories, the single-file compilation loop must be updated accordingly. 
 
-An additional dependency is added by appending | $(BUILD_DIR) to the loop. This ensures that make first checks whether the build directory exists and creates it if necessary, before compiling the individual source files.
+An additional dependency is added by appending | `$(BUILD_DIR)` to the loop. This ensures that make first checks whether the build directory exists and creates it if necessary, before compiling the individual source files.
