@@ -9,10 +9,12 @@ BINARY=exec
 
 all: $(BINARY)
 
-$(BINARY): $(OBJECTS)  
+$(BINARY): $(OBJECTS)
+	@echo compile $^ from $@
 	$(CC) -o $@ $^
 
 %.o:%.cpp
+	@echo compile $< into $@
 	$(CC) $() -c -o $@ $^ $(FLAGS)
 
 
