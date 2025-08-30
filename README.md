@@ -13,4 +13,8 @@ Next, the compiler is invoked to combine all the right-hand-side elements (speci
 
 The src-loop introduces some improvements: the code is now organized into directories. The SFILES list is generated using the wildcard operator, which collects all .cpp files in the SRC_DIR directory. The OBJECTS list is then derived by substituting the .cpp file extension with .o. The INDIRS flag now specifies the include directory. The rest of the file remains unchanged.
 
- 
+# 03-build-directory
+
+To store the object files, the build-directory introduces a dedicated build directory. The SFILE remains the same, bu the OBJECT list is modified to palce the .o files inside BUILD_DIR. Because the .o files and .ccp files are now in different directories, the single-file compilation loop must be updated accordingly. 
+
+An additional dependency is added by appending | $(BUILD_DIR) to the loop. This ensures that make first checks whether the build directory exists and creates it if necessary, before compiling the individual source files.
