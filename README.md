@@ -16,17 +16,28 @@ FLAGS=-Wall -Wextra -g $(INDIRS)  # compilation flag
 BINARY=exec                       # name of the executable
 ```
 
-Next we introduce a *rule*. When invoked, the Makefile looks for the first rule, which by convention is all. This rule depends on the file named `BINARY`. Running make will therefore hits the all rule. As the rule has a dependency on `BINARY`, make will checks if other rules depend on them.
+Next we introduce a *rule*. When invoked, the Makefile looks for the first rule, which by convention is all. This rule depends on the file named `BINARY`. Running make will therefore hits the all rule. As the rule has a dependency on `BINARY`, make will checks if other rules depend on them in a chain reaction mechanism. 
 
 ```bash
 all: $(BINARY)
 ```
 
-Finally we have the compilation. The `BINARY` variable depends on the main.ccp and foo.ccp files. In a nutshell, any modification of them would trigger a recompilation. In the body of the rule we specifies the exact compilation command.
+The following rule executes the compilation. The `BINARY` variable depends on two files: main.o and foo.o. When the execution reaches this line, make checks for other rules targeting them.
+
 
 ```bash
-$(BINARY): main.cpp foo.cpp
-	$(CC) -o $(BINARY) main.cpp foo.cpp $(FLAGS)
+$(BINARY): main.o foo.o
+	$(CC) -o $(BINARY) main.o foo.o $(FLAGS)
+```
+
+Indeed, there are two specific rules. If main.cpp or foo.cpp are modifided, make recompiles the file which are in turn used for creating the `BINARY` executable. 
+
+```bash
+main.o: main.cpp
+	$(CC) -c -o main.o main.cpp $(FLAGS)
+
+foo.o: foo.cpp
+	$(CC) -c -o foo.o foo.cpp $(FLAGS)
 ```
 
 In addition, we can specify other rules. To invoke this we have to type the command `make clean` to skip the first `all` rule. The convention is to name clean the set of operations for cleaning the files. 
