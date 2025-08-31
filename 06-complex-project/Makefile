@@ -4,7 +4,6 @@ HEADERS_DIR=include
 
 CC=g++
 
-HEADERS_DIR= include
 INCLUDE_DIRS= $(HEADERS_DIR) $(wildcard $(HEADERS_DIR)/*/)
 FLAGS=-Wall -Wextra -g $(addprefix -I,$(INCLUDE_DIRS)) -MMD -MP
 
