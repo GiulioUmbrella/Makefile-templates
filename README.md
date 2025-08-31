@@ -50,7 +50,13 @@ clean:
 
 ## 01-simple
 
-The simple example takes a list of source files specified in the variable SFILES and a corresponding list of object files in OBJECT. The binary exe is the target to be built. When this target is reached, the Makefile compiles each .cpp file into its corresponding .o file, without linking.
+The handwritten rules for the files have been replaced by a more general-purpose rule. This rule now introduces dependencies through file extensions rather than file names. As a result, we no longer need to write a specific rule for each SFILE and OBJECTS file.
+
+```bash
+%.o:%.cpp                                # specify dependenct by extension
+	@echo compile $^ into $@             # echo message
+	$(CC) $() -c -o $@ $^ $(FLAGS)       # convert in object file
+```
 
 Next, the compiler is invoked to combine all the right-hand-side elements specified by the special character `$^` and create the object `$@`.
 
