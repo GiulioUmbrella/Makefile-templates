@@ -63,6 +63,15 @@ Next, the compiler is invoked to combine all the right-hand-side elements specif
 
 ## 02-src-loop
 
+Although we have reduced the number of rules, we still need to manually update the list of .ccp and .o file. To add files to the list automatically, we can do the following:
+
+```bash
+SRC_DIR=src                              # specify a directory
+ 
+SFILES=$(wildcard $(SRC_DIR)/*.cpp )     # list .ccp in directory
+OBJECTS=$(patsubst %.cpp,%.o,$(SFILES))  # substitute .ccp with .o
+```
+
 The src-loop introduces some improvements: the code is now organized into directories. The SFILES list is generated using the wildcard operator, which collects all .cpp files in the SRC_DIR directory. The OBJECTS list is then derived by substituting the .cpp file extension with .o. The INDIRS flag now specifies the include directory. The rest of the file remains unchanged.
 
 ## 03-build-directory
