@@ -5,6 +5,8 @@ HEADERS_DIR=include
 CC=g++
 
 INCLUDE_DIRS= $(HEADERS_DIR) $(wildcard $(HEADERS_DIR)/*/)
+BUILD_INCLUDE_DIRS := $(patsubst $(HEADERS_DIR)%,$(BUILD_DIR)%,$(INCLUDE_DIRS))
+
 FLAGS=-Wall -Wextra -g $(addprefix -I,$(INCLUDE_DIRS)) -MMD -MP
 
 SOURCES=$(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/*/*.cpp)
@@ -20,11 +22,11 @@ $(BINARY): $(OBJECTS)
 	@echo compile $^ into $@ 
 	$(CC) -o $@ $^
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_INCLUDE_DIRS)
 	@echo compile $< into $@ 
 	$(CC) $(FLAGS) -c -o $@ $<
 
-$(BUILD_DIR):
+$(BUILD_INCLUDE_DIRS):
 	mkdir -p $@
 
 -include $(DEPS)
